@@ -1,20 +1,20 @@
-module juniversalShiftRegister(DATAOUT, clock, reset, MODE, DATAIN);
-  output reg [3:0] DATAOUT;
-  input clock, reset;
-  input [1:0] MODE;
-  input [3:0] DATAIN;
+module universalShiftRegister(DATAOUT, clock, reset, MODE, DATAIN);
+  output reg [3:0] outp;
+  input clk, rst;
+  input [1:0] mode;
+  input [3:0] inp;
   
-  always @(posedge clock)
+  always @(posedge clk)
   begin
-    if(reset)
-      DATAOUT <= 0;
+    if(rst)
+      outp <= 0;
     else
       begin
-        case(MODE)
-          2'b00 : DATAOUT <= DATAOUT;      // locked mode, do nothing
-          2'b01 : DATAOUT <= {DATAIN[0], DATAOUT[3:1]};//DATAOUT >> 1; // RFSR
-          2'b10 : DATAOUT <= {DATAOUT[2:0], DATAIN[0]};//DATAOUT << 1; // LFSR
-          2'b11 : DATAOUT <= DATAIN;       // parallel in parallel out
+        case(mode)
+          2'b00 : outp <= outp;      
+          2'b01 : outp <= {inp[0], outp[3:1]};
+          2'b10 : outp <= {outp[2:0], inp[0]}
+          2'b11 : outp <= inp;      
         endcase
       end
   end
