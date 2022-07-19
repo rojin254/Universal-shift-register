@@ -1,4 +1,4 @@
-module universalShiftRegister(DATAOUT, clock, reset, MODE, DATAIN);
+module universalShiftRegister(outp, clk, rst, mode, inp);
   output reg [3:0] outp;
   input clk, rst;
   input [1:0] mode;
