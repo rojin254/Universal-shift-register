@@ -1,62 +1,59 @@
-module juniversalShiftRegisterTb;
-  wire [3:0] DATAOUT;
-  reg clock, reset;
-  reg [1:0] MODE;
-  reg [3:0] DATAIN;
+module universalShiftRegisterTb;
+  wire [3:0] outp;
+  reg clk, rst;
+  reg [1:0] mode;
+  reg [3:0] inp;
   
-  juniversalShiftRegister jusr(DATAOUT, clock, reset, MODE, DATAIN);
+  universalShiftRegister jusr(outp, clk, rst, mode, inp);
   
   initial
   begin
-    clock =0; MODE = 2'b00; DATAIN = 4'b0000;
-    reset = 1; #10; reset = 0; #10;
+    clk =0; mode = 2'b00; inp = 4'b0000;
+    rst = 1; #10; rst = 0; #10;
     
     $display("RSLT\tD == DOUT");
-    // Start testing Right Shift mode
-    MODE = 2'b00; reset = 1; #10; reset = 0; #10;
-    MODE = 2'b01; DATAIN = 4'b0011; #10;
-    if ( DATAOUT === 4'b1000 ) // look at previous value of DATAOUT as well
-      $display("PASS\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+    // Right Shift mode
+    mode = 2'b00; rst = 1; #10; rst = 0; #10;
+    mode = 2'b01; inp = 4'b0011; #10;
+    if ( outp === 4'b1000 ) 
+      $display("PASS\t%p is %p with %p", inp, mode, outp);
     else
-      $display("FAIL\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+      $display("FAIL\t%p is %p with %p", inp, mode, outp);
     MODE = 2'b01; DATAIN = 4'b0011; #10;
-    if ( DATAOUT === 4'b1100 ) // look at previous value of DATAOUT as well
-      $display("PASS\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+    if ( DATAOUT === 4'b1100 ) 
+      $display("PASS\t%p is %p with %p",inp, mode, outp);
     else
-      $display("FAIL\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+      $display("FAIL\t%p is %p with %p", inp, mode, outp);
     
     
-    // Start testing Left Shift mode
+    //  Left Shift mode
     MODE = 2'b00; reset = 1; #10; reset = 0; #10;
     MODE = 2'b10; DATAIN = 4'b0111; #10;
-    if ( DATAOUT === 4'b0001 ) // 
-      $display("PASS\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+    if ( DATAOUT === 4'b0001 ) 
+      $display("PASS\t%p is %p with %p",inp, mode, outp);
     else
-      $display("FAIL\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+      $display("FAIL\t%p is %p with %p", inp, mode, outp);
     MODE = 2'b10; DATAIN = 4'b0111; #10;
-    if ( DATAOUT === 4'b0011 ) // 
-      $display("PASS\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+    if ( DATAOUT === 4'b0011 ) 
+      $display("PASS\t%p is %p with %p", inp, mode, outp);
     else
-      $display("FAIL\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+      $display("FAIL\t%p is %p with %p", inp, mode, outp);
 
 
-    // Start testing parallel load mode
+    // parallel load mode
     MODE = 2'b00; reset = 1; #10; reset = 0; #10;
     MODE = 2'b11; DATAIN = 4'b1010; #10;
     if ( DATAOUT === 4'b1010 )
-      $display("PASS\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+      $display("PASS\t%p is %p with %p", inp, mode, outp);
     else
-      $display("FAIL\t%p is %p with %p", DATAIN, MODE, DATAOUT);
+      $display("FAIL\t%p is %p with %p", inp, mode, outp);
 
     #20;
     $finish;
   end
   
     
-  //enabling the wave dump
-  initial begin 
-    $dumpfile("dump.vcd"); $dumpvars;
-  end
+  
 
   
   always #5 clock = ~clock;
